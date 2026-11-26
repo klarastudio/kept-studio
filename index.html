@@ -1,0 +1,812 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#faf9f5;color:#141413}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>Kept Studio</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Italianno&family=Caudex:ital@0;1&family=Spectral:ital,wght@0,300;0,400;0,500;1,300&display=swap">
+<style>
+/* Layout: one sheet of poster paper. The papercut bowl sits in the middle; each piece lifts off the paper and opens its own service page.
+   Palette from 3 Women (Millie's yellow, Pinkie's pink, the desert lavender, the pool blue, the poster's sepia script)
+   and from the Still Life book (lowercase spaced titles, each set in its piece's colour). */
+:root {
+  --board: #EFEBE5;        /* the pale grey-white of the 3 Donne poster paper */
+  --sepia: #6E4A2E;        /* deep sepia for links and buttons */
+  --title: #8B5A35;        /* the poster's tobacco-brown title lettering */
+  --credit: #2A2420;       /* the poster's black credit lettering */
+  --biro: #2F55A4;         /* the blue ballpoint of the letter on the poster */
+  --ink: #3E3128;          /* body text */
+  --millie: #E9CF6B;
+  --pinkie: #E4AFB4;
+  --sage: #B8A6C8;
+  --pool: #A9C6D3;
+  --wash: #FAF7F1;
+  /* piece colours, darkened enough to read on the board */
+  --c-flower: #A34654;
+  --c-lemon: #806212;
+  --c-bowl: #1C5F6A;
+  --rim: #2A7F92;          /* the painted blue rim of the bowl */
+  --frame: 12px;
+  --c-leaves: #2A6B4E;
+  --c-orange: #A8461A;
+  --c-peach: #94583F;
+  --c-cherry: #9E2A33;
+  --font-script: "Italianno", "Snell Roundhand", "Apple Chancery", cursive;
+  --font-book: "Caudex", "Iowan Old Style", Georgia, serif;
+  --font-body: "Spectral", "Iowan Old Style", Georgia, serif;
+  color-scheme: light;
+}
+* { box-sizing: border-box }
+html { background: var(--board) }
+body {
+  background: var(--board) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .42 0 0 0 0 .36 0 0 0 0 .28 0 0 0 .07 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E"); color: var(--ink);
+  font-family: var(--font-body); font-weight: 300; font-size: 1.0625rem; line-height: 1.65;
+  padding-inline: calc(var(--frame) + 16px); padding-block: var(--frame) calc(var(--frame) + 4rem); min-height: 100%;
+}
+/* the poster's horizontal fold creases, very faint; they scroll with the sheet */
+html { position: relative }
+html::before {
+  content: ""; position: absolute; inset: 0; z-index: 0; pointer-events: none;
+  background:
+    linear-gradient(180deg, transparent calc(33.3% - 1px), rgba(255,255,255,.5) calc(33.3% - 1px), rgba(255,255,255,.5) 33.3%, rgba(70,60,50,.06) 33.3%, rgba(70,60,50,.06) calc(33.3% + 1px), transparent calc(33.3% + 1px)),
+    linear-gradient(180deg, transparent calc(66.6% - 1px), rgba(255,255,255,.5) calc(66.6% - 1px), rgba(255,255,255,.5) 66.6%, rgba(70,60,50,.06) 66.6%, rgba(70,60,50,.06) calc(66.6% + 1px), transparent calc(66.6% + 1px));
+}
+/* the bowl's blue rim, drawn around the whole page */
+body::after {
+  content: ""; position: fixed; z-index: 100; pointer-events: none;
+  inset: env(safe-area-inset-top, 0px) 0 env(safe-area-inset-bottom, 0px) 0;
+  border: var(--frame) solid var(--rim);
+}
+@media (max-width: 720px) { :root { --frame: 7px } }
+main { position: relative; z-index: 1; max-width: 980px; margin-inline: auto }
+a { color: var(--sepia) }
+:focus-visible { outline: 2px dashed var(--sepia); outline-offset: 4px; border-radius: 2px }
+.sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap }
+
+/* ——— Top bar ——— */
+.topbar {
+  display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 0.75rem 1.5rem;
+  padding-block: 1rem; font-size: 0.78rem; letter-spacing: 0.18em; text-transform: uppercase;
+}
+.topbar .home-link { text-decoration: none; color: var(--sepia); font-weight: 500 }
+.topbar nav { display: flex; flex-wrap: wrap; align-items: center; gap: 0.5rem 1.4rem }
+.topbar nav a { text-decoration: none; color: var(--ink) }
+.topbar nav a:hover { color: var(--sepia); text-decoration: underline }
+.cta {
+  display: inline-block; text-decoration: none; font-family: var(--font-body); font-weight: 500;
+  font-size: 0.78rem; letter-spacing: 0.16em; text-transform: uppercase;
+  color: var(--sepia) !important; padding-block: 0.2rem; border-bottom: 1px solid currentColor;
+}
+.cta:hover { color: var(--ink) !important }
+.cta.solid { background: var(--sepia); color: var(--wash) !important; padding: 0.7rem 1.1rem; border: 0; border-radius: 2px }
+.cta.solid:hover { background: var(--ink); color: var(--wash) !important }
+
+/* ——— Masthead ——— */
+.mast { text-align: center; padding-block: 1.5rem 0.25rem }
+.mast h1 {
+  font-family: var(--font-body); font-weight: 300; color: var(--rim);
+  text-transform: uppercase; letter-spacing: 0.16em; text-wrap: balance;
+  font-size: clamp(1.9rem, 5.6vw, 3.6rem); line-height: 1.15; margin: 0 0 0 0.16em;
+}
+.mast .tag { margin: 0.5rem auto 0; font-size: 0.8rem; letter-spacing: 0.22em; text-transform: uppercase; color: var(--rim) }
+.mast .tag .nw { white-space: nowrap }
+.mast-logo { display: block; width: clamp(120px, 24vw, 180px); height: auto; margin: 0 auto 1.1rem }
+.topbar .home-link { display: inline-flex; align-items: center; gap: 0.55rem }
+.topbar .home-link img { width: 28px; height: 28px; display: block }
+
+/* ——— The bowl ——— */
+.stage { position: relative; width: min(100%, 560px); aspect-ratio: 1.15; margin: 2.25rem auto 0 }
+.piece {
+  position: absolute; display: block; border-radius: 40%;
+  transition: transform .45s cubic-bezier(.2,.8,.2,1), filter .45s;
+  filter: drop-shadow(0 1px 0 rgba(62,49,40,.10));
+}
+.piece img { display: block; width: 100%; height: auto; pointer-events: none }
+.piece:hover, .piece:focus-visible {
+  transform: translateY(-8px) rotate(var(--tilt, -2deg)) scale(1.03);
+  filter: drop-shadow(0 14px 12px rgba(62,49,40,.22)); outline: none;
+}
+.piece .say {
+  position: absolute; left: 50%; top: 100%; transform: translate(-50%, 6px);
+  white-space: nowrap; font-family: var(--font-body); font-weight: 500; font-size: 0.72rem;
+  letter-spacing: 0.16em; text-transform: uppercase; color: var(--c, var(--sepia));
+  background: color-mix(in srgb, var(--wash) 85%, transparent); padding: 0.2rem 0.5rem; border-radius: 2px;
+  opacity: 0; transition: opacity .3s; pointer-events: none;
+}
+.piece:hover .say, .piece:focus-visible .say { opacity: 1 }
+.stage .piece:hover, .stage .piece:focus-visible { z-index: 20 }
+.piece .say { z-index: 1 }
+.p-bowl      { left: 28.30%; top: 56.25%; width: 63.45%; z-index: 1; --tilt: 0deg; --c: var(--c-bowl) }
+.p-pineapple { left: 1.75%;  top: 9.99%;  width: 40.88%; z-index: 3; --tilt: -3deg; --c: var(--c-leaves) }
+.p-flower    { left: 44.23%; top: 2.07%;  width: 23.76%; z-index: 2; --tilt: 4deg; --c: var(--c-flower) }
+.p-peach     { left: 42.63%; top: 23.40%; width: 25.12%; z-index: 4; --tilt: -2deg; --c: var(--c-peach) }
+.p-orange    { left: 66.63%; top: 21.01%; width: 30.40%; z-index: 4; --tilt: 3deg; --c: var(--c-orange) }
+.p-slice     { left: 39.42%; top: 46.40%; width: 9.84%;  z-index: 5; --tilt: -8deg; --c: var(--c-orange) }
+.p-wedge     { left: 58.30%; top: 43.10%; width: 10.72%; z-index: 5; --tilt: 9deg; --c: var(--c-lemon) }
+.p-flower .say, .p-orange .say { top: auto; bottom: 100%; transform: translate(-50%, -12px) }
+.p-bowl .say { top: 55% }
+.hint { text-align: center; margin: 1rem 0 0; font-family: var(--font-book); font-style: italic; color: var(--biro); font-size: 0.95rem }
+
+.lede { max-width: 32rem; margin: 2.75rem auto 0; text-align: center; font-size: 1.2rem; line-height: 1.6; text-wrap: pretty }
+.lede + .lede { margin-top: 1rem; font-size: 1.05rem }
+.lede em { font-style: italic; color: var(--sepia) }
+.lede-cta { text-align: center; margin-top: 2rem }
+
+/* ——— Section headings on home ——— */
+.home-h { text-align: center; margin: 4rem 0 0.25rem; font-family: var(--font-book); font-weight: 400;
+  font-size: 1.05rem; letter-spacing: 0.5em; text-transform: lowercase; color: var(--biro) }
+.home-ask { text-transform: none; letter-spacing: 0.06em; font-size: clamp(1.65rem, 4.6vw, 2.6rem); line-height: 1.5; font-style: italic; text-wrap: balance; margin-top: 4.5rem; margin-bottom: 1.5rem }
+.home-ask span { padding: 0.15em 0.55em; background: color-mix(in srgb, var(--millie) 62%, transparent); border-radius: 0.3em 0.6em 0.35em 0.7em; box-decoration-break: clone; -webkit-box-decoration-break: clone }
+.home-sub { text-align: center; margin: 0 0 1.5rem; font-size: 0.95rem }
+
+/* ——— Services list ——— */
+.menu {
+  list-style: none; padding: 0; margin: 0 auto; max-width: 52rem;
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr)); gap: 0.25rem 1.75rem;
+}
+.menu a {
+  display: grid; grid-template-columns: 2.8rem 1fr; align-items: center; gap: 0.85rem;
+  padding: 0.7rem 0.25rem; text-decoration: none; color: var(--ink); height: 100%;
+  border-bottom: 1px solid color-mix(in srgb, var(--sepia) 22%, transparent);
+}
+.menu img { width: 2.8rem; height: 2.4rem; object-fit: contain }
+.menu b { display: block; font-weight: 500; font-size: 1rem; color: var(--c, var(--sepia)) }
+.menu small { display: block; font-size: 0.86rem; line-height: 1.4 }
+.menu a:hover b { text-decoration: underline }
+
+/* ——— Selected work ——— */
+.work { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1.75rem; align-items: start; max-width: 60rem; margin-inline: auto }
+.work figure { margin: 0; min-width: 0 }
+.work img { display: block; width: 100%; height: auto; box-shadow: 0 10px 18px -10px rgba(62,49,40,.35) }
+.work figcaption { margin-top: 0.75rem; font-size: 0.92rem; line-height: 1.45 }
+.work figcaption b { display: block; font-family: var(--font-book); font-weight: 400; font-size: 1.05rem; color: var(--sepia) }
+
+.testimonial { margin: 1rem 0 0; padding: 0.9rem 0 0 1rem; border-left: 2px solid color-mix(in srgb, var(--biro) 55%, transparent) }
+.testimonial p { margin: 0; font-family: var(--font-book); font-style: italic; font-size: 0.95rem; line-height: 1.55; color: var(--ink) }
+.testimonial footer { text-align: left; margin-top: 0.6rem; font-size: 0.74rem; letter-spacing: 0.12em; text-transform: uppercase; line-height: 1.5; color: var(--biro) }
+/* ——— Service pages ——— */
+.page { padding-block: 1rem }
+.back { display: inline-block; font-size: 0.78rem; letter-spacing: 0.2em; text-transform: uppercase; text-decoration: none; color: var(--sepia); padding-block: 0.5rem }
+.back:hover { text-decoration: underline }
+.page-grid { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); gap: 2.5rem 3.5rem; align-items: start; margin-top: 1.25rem }
+.hero-piece { position: relative; display: grid; place-items: center; padding: 1.5rem; gap: 1.5rem }
+.hero-piece::before {
+  content: ""; position: absolute; inset: 0 4% auto; height: 70%; border-radius: 48% 52% 46% 54% / 55% 45% 55% 45%;
+  background: var(--tint); opacity: .4; filter: blur(8px);
+}
+.hero-piece img { position: relative; width: var(--w, 160px); max-width: 100%; height: auto; transform: rotate(var(--tilt, -2deg)); filter: drop-shadow(0 12px 10px rgba(62,49,40,.18)) }
+.book-label { position: relative; margin: 0; font-family: var(--font-book); font-size: 1.05rem; letter-spacing: 0.5em; text-transform: lowercase; color: var(--c) }
+.prompt { position: relative; margin: 0; max-width: 19rem; font-family: var(--font-book); font-size: 1.05rem; line-height: 1.6; color: var(--c); white-space: pre-line; text-align: left }
+.copy { min-width: 0; max-width: 36rem }
+.copy h2 { font-family: var(--font-book); font-weight: 400; color: var(--ink); font-size: clamp(2rem, 4.5vw, 2.6rem); line-height: 1.15; margin: 0 0 1.25rem; text-wrap: balance }
+.copy .lead { font-size: 1.22rem; line-height: 1.55; margin: 0 0 1.25rem; text-wrap: pretty }
+.copy p { margin: 0 0 1rem }
+.copy h3 { font-size: 0.78rem; letter-spacing: 0.22em; text-transform: uppercase; font-weight: 500; color: var(--biro); margin: 2rem 0 0.5rem }
+.svc-photos { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0.6rem; margin-top: 0.75rem; max-width: 24rem }
+.svc-photos img { display: block; width: 100%; aspect-ratio: 4 / 3; object-fit: cover; box-shadow: 0 8px 14px -9px rgba(62,49,40,.4) }
+.copy ul, .copy ol { margin: 0; padding-left: 1.2rem; display: grid; gap: 0.35rem }
+.copy li::marker { color: var(--c, var(--sepia)) }
+.page-cta { margin-top: 2.5rem; display: flex; flex-wrap: wrap; align-items: baseline; gap: 0.5rem 1rem }
+.page-cta p { margin: 0; font-size: 1rem }
+.next { margin-top: 2.5rem; padding-top: 1rem; border-top: 1px solid color-mix(in srgb, var(--sepia) 22%, transparent); display: flex; justify-content: space-between; gap: 1rem; flex-wrap: wrap; font-size: 0.95rem }
+/* ——— Feature card standing in for photos ——— */
+.feature-card { display: grid; gap: 0.6rem; align-content: center; min-height: 18rem; padding: 2.25rem 2rem; text-decoration: none; color: var(--ink);
+  background: var(--card, #DDE5D3); box-shadow: 0 10px 18px -10px rgba(62,49,40,.35); transition: transform .3s }
+.feature-card:hover, .feature-card:focus-visible { transform: translateY(-3px) }
+.orla-pair { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0.75rem; margin-top: 0.75rem }
+.orla-pair img { display: block; width: 100%; aspect-ratio: 3 / 2; object-fit: cover; box-shadow: 0 8px 14px -9px rgba(62,49,40,.4) }
+.feature-card .fc-img { display: block; width: calc(100% + 4rem); max-width: none; margin: -2.25rem -2rem 0.9rem; aspect-ratio: 3 / 2; object-fit: cover }
+.fc-pub { font-size: 0.74rem; letter-spacing: 0.22em; text-transform: uppercase; color: var(--biro) }
+.fc-title { font-family: var(--font-book); font-size: clamp(1.6rem, 3.4vw, 2.2rem); line-height: 1.15; color: var(--ink); text-wrap: balance }
+.fc-sub { font-family: var(--font-book); font-style: italic; font-size: 1.1rem; color: var(--fc-accent, #4E6B45) }
+.fc-meta { font-size: 0.85rem }
+.fc-dark { --card: #2E3B2F; --fc-accent: #E8C877; color: #F3EDE0 }
+.fc-dark .fc-title, .fc-dark .fc-meta { color: #F3EDE0 }
+.fc-dark .fc-pub, .fc-dark .fc-read { color: #E8C877 }
+.fc-read { margin-top: 0.75rem; font-size: 0.78rem; letter-spacing: 0.16em; text-transform: uppercase; color: var(--sepia); border-bottom: 1px solid currentColor; justify-self: start }
+/* ——— Syd White home page, rebuilt so the plates move ——— */
+.syd-fig { margin: 0 0 1rem }
+.syd-fig > img { display: block; width: 100%; height: auto; box-shadow: 0 10px 18px -10px rgba(62,49,40,.35) }
+.syd-fig figcaption { margin-top: 0.5rem; font-size: 0.86rem; line-height: 1.4; font-style: italic }
+.syd-refs { margin: 0.5rem 0 0 }
+.syd-refs-h { font-size: 0.74rem !important; letter-spacing: 0.2em; text-transform: uppercase; font-style: normal !important; color: var(--biro); margin: 0 0 0.6rem }
+.syd-refs-row { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0.75rem; align-items: start }
+.syd-refs-row figure { margin: 0; min-width: 0 }
+.syd-refs-row img { display: block; width: 100%; aspect-ratio: 4 / 3; object-fit: cover; box-shadow: 0 8px 14px -9px rgba(62,49,40,.4) }
+.syd-refs-row figcaption { margin-top: 0.4rem; font-size: 0.8rem; line-height: 1.35 }
+.syd-stage { position: relative; aspect-ratio: 1600 / 784; max-width: 100%; overflow: hidden; box-shadow: 0 10px 18px -10px rgba(62,49,40,.35) }
+.syd-bg { position: absolute; inset: 0; width: 100%; height: 100%; display: block }
+.syd-btn { position: absolute; height: auto; transform-origin: 50% 60%;
+  filter: drop-shadow(0 2px 2px rgba(40,30,20,.25));
+  transition: transform .45s cubic-bezier(.2,.9,.25,1.3), filter .45s }
+.syd-home { position: absolute; display: block; cursor: pointer; z-index: 2 }
+.syd-home:focus-visible { outline: 2px dashed var(--rim); outline-offset: 4px }
+.syd-home:hover .syd-btn, .syd-home:focus-visible .syd-btn, .syd-btn:hover, .syd-btn:active { transform: translateY(-6%) rotate(var(--r)) scale(1.07); filter: drop-shadow(0 12px 10px rgba(40,30,20,.35)) }
+@media (prefers-reduced-motion: reduce) { .syd-btn { transition: none } .syd-btn:hover, .syd-btn:active { transform: none } }
+/* ——— Related work on service pages ——— */
+.related { list-style: none; padding: 0 !important; margin: 0.75rem 0 0; display: grid !important; grid-template-columns: repeat(auto-fill, minmax(9.5rem, 1fr)); gap: 1rem !important }
+.related a { display: block; text-decoration: none; color: var(--ink) }
+.related img { display: block; width: 100%; aspect-ratio: 4 / 3; object-fit: cover; box-shadow: 0 8px 14px -9px rgba(62,49,40,.4); transition: transform .3s }
+.related a:hover img, .related a:focus-visible img { transform: translateY(-3px) }
+.related b { display: block; margin-top: 0.5rem; font-family: var(--font-book); font-weight: 400; font-size: 0.98rem; line-height: 1.3; color: var(--sepia) }
+.related a:hover b { text-decoration: underline }
+.related-ph { display: grid; place-items: center; aspect-ratio: 4 / 3; padding: 0.75rem; text-align: center; font-family: var(--font-book); font-style: italic; font-size: 0.95rem; color: var(--ink); background: #DDE5D3; box-shadow: 0 8px 14px -9px rgba(62,49,40,.4) }
+.related small { display: block; font-size: 0.8rem; line-height: 1.35 }
+.next a { text-decoration: none }
+.next a:hover { text-decoration: underline }
+
+/* ——— Booking ——— */
+.book-steps { list-style: none; padding: 0 !important; margin: 1.25rem 0 0; display: grid; gap: 1rem; counter-reset: step }
+.book-steps li { display: grid; grid-template-columns: 2.25rem 1fr; gap: 0.75rem; align-items: baseline; counter-increment: step }
+.book-steps li::before { content: counter(step); font-family: var(--font-script); font-size: 2.4rem; line-height: 0.6; color: var(--sepia) }
+.contact { margin-top: 0.5rem; display: flex; flex-wrap: wrap; align-items: center; gap: 0.75rem 1rem }
+.contact code { font-family: var(--font-body); font-size: 1.1rem; font-weight: 400; user-select: all; padding: 0.35rem 0.75rem; background: color-mix(in srgb, var(--wash) 70%, transparent); border-radius: 3px; overflow-wrap: anywhere }
+.contact button { font: inherit; font-size: 0.75rem; letter-spacing: 0.18em; text-transform: uppercase; cursor: pointer; background: transparent; color: var(--sepia); border: 1px solid var(--sepia); border-radius: 2px; padding: 0.45rem 0.85rem }
+.contact button:hover { background: var(--sepia); color: var(--wash) }
+.subject { font-family: var(--font-book); font-style: italic }
+.calendly { margin: 1.75rem 0 0.35rem }
+.calendly a { font-family: var(--font-book); font-size: 1.35rem; color: var(--sepia); text-decoration: none; border-bottom: 1px solid currentColor; padding-bottom: 0.1rem }
+.calendly a:hover { color: var(--ink) }
+.calendly-note { margin: 0; font-size: 0.95rem }
+
+
+/* ——— Past projects ——— */
+.projects-head { max-width: 40rem; margin: 1.25rem auto 0; text-align: center }
+.projects-head h2 { font-family: var(--font-book); font-weight: 400; color: var(--ink); font-size: clamp(2rem, 4.5vw, 2.6rem); line-height: 1.15; margin: 0 0 0.75rem }
+.projects-head p { margin: 0 auto; font-size: 1.1rem; text-wrap: pretty }
+.jump { display: flex; flex-wrap: wrap; justify-content: center; gap: 0.5rem 1.5rem; margin-top: 1.25rem; font-size: 0.78rem; letter-spacing: 0.18em; text-transform: uppercase }
+.jump a { text-decoration: none } .jump a:hover { text-decoration: underline }
+.filters { display: flex; flex-wrap: wrap; justify-content: center; gap: 0.5rem; margin: 1.75rem 0 0 }
+.filters button { font: inherit; font-size: 0.74rem; letter-spacing: 0.14em; text-transform: uppercase; cursor: pointer; background: transparent; color: var(--sepia); border: 1px solid color-mix(in srgb, var(--sepia) 45%, transparent); border-radius: 999px; padding: 0.4rem 0.85rem }
+.filters button[aria-pressed="true"] { background: var(--sepia); color: var(--wash); border-color: var(--sepia) }
+.project-list { list-style: none; padding: 0; margin: 2.5rem 0 0; display: grid; gap: 3.5rem }
+.project { display: grid; grid-template-columns: minmax(0, 6fr) minmax(0, 5fr); gap: 1.5rem 2.75rem; align-items: start }
+.project:nth-child(even) .shots { order: 2 }
+.shots { display: grid; gap: 0.75rem; grid-template-columns: repeat(var(--n, 1), minmax(0, 1fr)); align-items: start; min-width: 0 }
+.shots img, .gallery img { display: block; width: 100%; height: auto; box-shadow: 0 10px 18px -10px rgba(62,49,40,.35) }
+.project .info { min-width: 0 }
+.project .kind { margin: 0; font-size: 0.74rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--biro) }
+.project h3 { margin: 0.35rem 0 0.75rem; font-family: var(--font-book); font-weight: 400; font-size: 1.6rem; line-height: 1.2; color: var(--ink); text-wrap: balance }
+.project p { margin: 0 0 0.85rem }
+.project .info b { font-weight: 500; color: var(--ink) }
+.listen { margin: 0.25rem 0 1rem; padding: 0.75rem 0.9rem; background: color-mix(in srgb, var(--millie) 30%, var(--wash)); border-radius: 3px; max-width: 26rem }
+.listen figcaption { margin: 0 0 0.45rem; font-size: 0.74rem; letter-spacing: 0.18em; text-transform: uppercase; color: var(--biro) }
+.listen audio { display: block; width: 100%; height: 2.25rem }
+.project .role { font-size: 0.92rem; font-style: italic }
+.tags { display: flex; flex-wrap: wrap; gap: 0.4rem 0.75rem; margin-top: 0.5rem }
+.tags a { font-size: 0.78rem; letter-spacing: 0.06em; text-decoration: none; color: var(--c); border-bottom: 1px solid currentColor }
+.see-all { text-align: center; margin-top: 2rem }
+.gallery-h { text-align: center; margin: 5rem 0 0.25rem; font-family: var(--font-book); font-weight: 400; font-size: 1.05rem; letter-spacing: 0.5em; text-transform: lowercase; color: var(--biro) }
+.gallery { columns: 3 15rem; column-gap: 1.25rem; margin-top: 1.75rem }
+.gallery figure { break-inside: avoid; margin: 0 0 1.5rem }
+.gallery figcaption { margin-top: 0.55rem; font-size: 0.88rem; line-height: 1.4 }
+.gallery figcaption b { font-family: var(--font-book); font-weight: 400; color: var(--sepia) }
+.photo-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 1rem; margin: 1.75rem auto 0; max-width: 52rem }
+.photo-grid img { display: block; width: 100%; aspect-ratio: 4 / 3; object-fit: cover; box-shadow: 0 10px 18px -10px rgba(62,49,40,.35) }
+@media (max-width: 720px) {
+  .photo-grid { grid-template-columns: repeat(2, minmax(0, 1fr)) }
+  .project { grid-template-columns: 1fr }
+  .project:nth-child(even) .shots { order: 0 }
+}
+
+footer { text-align: center; margin-top: 4rem; font-size: 0.78rem; letter-spacing: 0.18em; text-transform: uppercase; color: var(--sepia) }
+
+@media (max-width: 720px) {
+  .page-grid { grid-template-columns: 1fr; gap: 0.5rem }
+  .work { grid-template-columns: 1fr; max-width: 26rem }
+  .piece .say { display: none }
+  .topbar { justify-content: center }
+}
+@media (prefers-reduced-motion: reduce) {
+  .piece, .piece .say { transition: none }
+  .piece:hover, .piece:focus-visible { transform: none }
+}
+</style>
+
+<main>
+  <header class="topbar">
+    <a class="home-link" href="#"><img src="kept-logo.png" alt="" width="28" height="28">Kept Studio</a>
+    <nav aria-label="Site">
+      <a href="#services">Services</a>
+      <a href="#projects">Past work</a>
+      <a class="cta solid" href="#book">Let’s chat</a>
+    </nav>
+  </header>
+
+  <!-- HOME -->
+  <div id="home">
+    <div class="mast">
+      <img class="mast-logo" src="kept-logo.png" alt="Kept Studio logo: a teal six-petal rosette with red dots and a yellow centre, inside a yellow ring with stars and the words Kept Studio" width="170" height="170">
+      <h1>Kept Studio</h1>
+      <p class="tag"><span class="nw">Branding &amp; Marketing</span> · <span class="nw">Klara Ingersoll</span></p>
+    </div>
+
+    <nav class="stage" aria-label="Services">
+      <a class="piece p-bowl" href="#identity"><img src="cutouts/bowl.png" alt=""><span class="say">Brand identity</span><span class="sr">Brand identity</span></a>
+      <a class="piece p-pineapple" href="#social"><img src="cutouts/pineapple.png" alt=""><span class="say">Social media</span><span class="sr">Social media</span></a>
+      <a class="piece p-flower" href="#photo"><img src="cutouts/flower.png" alt=""><span class="say">Photo &amp; editorial</span><span class="sr">Photo and editorial</span></a>
+      <a class="piece p-peach" href="#newsletters"><img src="cutouts/peach.png" alt=""><span class="say">Newsletters &amp; interviews</span><span class="sr">Newsletters and interviews</span></a>
+      <a class="piece p-orange" href="#print"><img src="cutouts/orange.png" alt=""><span class="say">Print &amp; merch</span><span class="sr">Print and merch</span></a>
+      <a class="piece p-slice" href="#strategy"><img src="cutouts/slice.png" alt=""><span class="say">Strategy &amp; workshops</span><span class="sr">Strategy and workshops</span></a>
+      <a class="piece p-wedge" href="#story"><img src="cutouts/wedge.png" alt=""><span class="say">Story &amp; copywriting</span><span class="sr">Brand story and copywriting</span></a>
+    </nav>
+
+    <p class="lede">A branding, marketing and media studio to help you slow down and share the story of your work with care.</p>
+    <p class="lede">I’m an artistic director and creative coach, and my whole life I’ve been dedicated to collaborative creative projects. I listen closely and ask lots of questions. I design identities, print and merch, photograph people and places, and write the stories that hold it all together, for makers, nonprofits, authors and towns. I trained as a radio journalist, taught design, and hold a master’s in regional planning focused on cultural landscapes and place identity. My process draws on mindfulness and on research into how the creative process works.</p>
+
+    <h2 class="home-h home-ask" id="services"><span>What can I help you with?</span></h2>
+    <ul class="menu">
+      <li><a href="#social" style="--c: var(--c-leaves)"><img src="cutouts/pineapple.png" alt=""><span><b>Social media</b><small>Post and story graphics, templates, content calendars</small></span></a></li>
+      <li><a href="#newsletters" style="--c: var(--c-peach)"><img src="cutouts/peach.png" alt=""><span><b>Newsletters &amp; interviews</b><small>Newsletter design, maker interviews, email campaigns</small></span></a></li>
+      <li><a href="#photo" style="--c: var(--c-flower)"><img src="cutouts/flower.png" alt=""><span><b>Photo &amp; editorial</b><small>Shoots, art direction, editorial spreads, magazines</small></span></a></li>
+      <li><a href="#print" style="--c: var(--c-orange)"><img src="cutouts/orange.png" alt=""><span><b>Print &amp; merch</b><small>Posters, book covers, invitations, hats, shirts, mugs</small></span></a></li>
+      <li><a href="#identity" style="--c: var(--c-bowl)"><img src="cutouts/bowl.png" alt=""><span><b>Brand identity</b><small>Logo, palette, typefaces, guidelines</small></span></a></li>
+      <li><a href="#story" style="--c: var(--c-lemon)"><img src="cutouts/wedge.png" alt=""><span><b>Story &amp; copywriting</b><small>Origin story, about page, website and press copy</small></span></a></li>
+      <li><a href="#strategy" style="--c: var(--c-orange)"><img src="cutouts/slice.png" alt=""><span><b>Strategy &amp; workshops</b><small>Listening sessions, marketing plans, team workshops</small></span></a></li>
+    </ul>
+    <p class="lede-cta"><a class="cta solid" href="#book">Let’s chat</a></p>
+
+    <h2 class="home-h" id="work">recent work</h2>
+    <div class="work">
+      <figure id="work-hex-calendar" data-cats="print identity">
+        <img src="work/hex-calendar.jpg" alt="Twelve hex signs for a 2027 calendar, each a star or rosette in a yellow ring with zodiac symbols, set on barn walls coloured to match each month's full moon" loading="lazy">
+        <figcaption><b>2027 Hex Sign Calendar</b>A barn star for every full moon, with what's in season in New England, designed in a riso-print style</figcaption>
+      </figure>
+      <figure id="work-elements" data-cats="print">
+        <img src="work/postcard.jpg" alt="Watercolour and collage wedding sign: a pale yellow sun on a pink field, framed by painted leaves, with lavender sprigs and torn grey and blue paper hills" loading="lazy">
+        <figcaption><b>The Elements</b>Watercolour and collage wedding sign</figcaption>
+      </figure>
+      <figure id="work-window" data-cats="print">
+        <img src="work/below-the-window.jpg" alt="Book cover for Below the Window: a rust-red window frame drawn over a pale yellow brick pattern" loading="lazy">
+        <figcaption><b>Below the Window</b>Book cover design</figcaption>
+        <blockquote class="testimonial">
+          <p>“Klara offered foundational support on key elements of my art/architecture book, <em>Below the Window</em> (2026), including place-based research, copy editing, and structural design. She also helped conceptualize and design the book cover, mindfully balancing my preferences with her own expertise in graphic design. Klara is creative, curious, endlessly collaborative and an asset to any team or individual who is lucky to work with her.”</p>
+          <footer>Anna Karayorgi, author</footer>
+        </blockquote>
+      </figure>
+      <figure id="work-quonk" data-cats="identity">
+        <img src="work/quonk-logo.jpg" alt="Quonk logo: an ornamented gold spiral, like the opening letter of a storybook, on royal blue" loading="lazy">
+        <figcaption><b>Quonk</b>Medieval-inspired logo design for an interactive theatre company</figcaption>
+      </figure>
+    </div>
+    <h2 class="home-h" id="projects">past work</h2>
+    <p class="home-sub">Identities, publications, places and events, each one shaped by listening first.</p>
+    <ul class="project-list">
+      <li class="project" id="work-orla" data-cats="newsletters story">
+        <div class="shots" style="--n: 1"><a class="feature-card" href="https://orlastories.substack.com/p/interview-with-justin-of-valdah" target="_blank" rel="noopener">
+          <img class="fc-img" src="work/orla/valdah-header.jpg" alt="The word valdah chain-stitched in pale yellow thread on raw selvedge denim, loose threads trailing across a dark wooden table" loading="lazy">
+          <span class="fc-pub">Orla Stories</span>
+          <span class="fc-title">Interview with Justin of valdah</span>
+          <span class="fc-sub">Reviving Vintage Denim Workwear</span>
+          <span class="fc-meta">By Klara Ingersoll · March 2026</span>
+          <span class="fc-read">Read the interview →</span>
+        </a>
+          <div class="orla-pair">
+            <img src="work/orla/valdah-machine.jpg" alt="A hand resting on a strip of denim stitched with valdah beside a black vintage Wilcox &amp; Gibbs sewing machine on a dark wooden table" loading="lazy">
+            <img src="work/orla/valdah-stencil.jpg" alt="Justin, in a striped work shirt and raw denim jeans with arched back pockets, leaning over a pale blue stencil machine" loading="lazy">
+          </div></div>
+        <div class="info">
+          <p class="kind">Newsletter · Interview</p>
+          <h3>Orla Stories: Justin of valdah</h3>
+          <p>An interview I wrote for Orla Stories, the journal of Orla, a shop in Western Massachusetts. I also helped define the voice and vision for the publication: long-form conversations with the artists and makers whose work Orla carries, visited in their own studios.</p>
+          <p>I visited Justin in his Northampton studio. His label, valdah, is named after his great-grandmother, a seamstress, and he makes clothes inspired by early and mid-century workwear on vintage machines, including a 1921 Singer 31 and a Wilcox &amp; Gibbs chain-stitcher. We talked about mule ear pockets, wartime workwear, a 1950s Lee “beer jacket” and why clothes should be worn until they wear out.</p>
+          <p class="role">What I did: Interviewing and writing, helping define the publication’s voice and vision</p>
+          <div class="tags"><a href="#newsletters" style="--c: var(--c-peach)">Newsletters &amp; interviews</a> <a href="#story" style="--c: var(--c-lemon)">Story &amp; copywriting</a></div>
+        </div>
+      </li>
+      <li class="project" id="work-syd" data-cats="identity photo">
+        <div class="shots" style="--n: 1">
+          <figure class="syd-fig">
+            <div class="syd-stage" role="img" aria-label="Syd White's home page: hand-embossed metal name plates floating over a pale green sky ringed with pink clouds">
+              <img class="syd-bg" src="work/syd/home-bg.jpg" alt=""><a class="syd-home" href="https://sydw3941.ic.tc/" target="_blank" rel="noopener" aria-label="Visit Syd White’s website (opens in a new tab)" style="left:1.91%;top:4.108%;width:14.931%"><img class="syd-btn" src="work/syd/btn-logo.png" alt="" style="position:static;display:block;width:100%;--r:-2deg"></a><img class="syd-btn" src="work/syd/btn-about.png" alt="" style="left:20.417%;top:21.317%;width:11.458%;--r:3deg"><img class="syd-btn" src="work/syd/btn-weddings.png" alt="" style="left:68.924%;top:21.955%;width:16.632%;--r:2.5deg"><img class="syd-btn" src="work/syd/btn-retail.png" alt="" style="left:40.417%;top:32.79%;width:21.007%;--r:-2.5deg"><img class="syd-btn" src="work/syd/btn-social.png" alt="" style="left:13.056%;top:45.113%;width:22.222%;--r:-3deg"><img class="syd-btn" src="work/syd/btn-renders.png" alt="" style="left:68.125%;top:50.708%;width:24.722%;--r:2.5deg"><img class="syd-btn" src="work/syd/btn-handmade.png" alt="" style="left:42.569%;top:55.737%;width:16.007%;--r:2deg"><img class="syd-btn" src="work/syd/btn-media.png" alt="" style="left:20.903%;top:68.768%;width:16.389%;--r:-2deg">
+            </div>
+            <figcaption>Home page. Hover over the plates to see them move, and click the Syd White plate to explore her site.</figcaption>
+          </figure>
+          <figure class="syd-fig">
+            <img src="work/syd/handmade-decor.jpg" alt="Syd White's Handmade decor page: a jute drum chandelier, a beaded pendant lamp, a stained glass nightlight and embossed metal tiles and frames, each cut out and floating on white" loading="lazy">
+            <figcaption>Handmade decor. I wanted each piece to look like it was floating in space, like a button you could pick up.</figcaption>
+          </figure>
+          <figure class="syd-refs">
+            <figcaption class="syd-refs-h">Visual references, from my course <em>Unreal Estate</em></figcaption>
+            <div class="syd-refs-row">
+              <figure><img src="work/syd/ref-pomegranates.jpg" alt="Film still from The Color of Pomegranates: costumed figures before a wall hung with rugs, textiles and gilded frames" loading="lazy"><figcaption><em>The Color of Pomegranates</em> (Sergei Parajanov, 1969): the wall of rugs and framed objects</figcaption></figure>
+              <figure><img src="work/syd/ref-shaker.jpg" alt="Shaker gift drawing: a pale blue house beneath a flowering tree, framed by a ring of diamonds, birds and blossoms" loading="lazy"><figcaption>Shaker gift drawing: everything arranged, ringed and floating on the page</figcaption></figure>
+            </div>
+          </figure>
+        </div>
+        <div class="info">
+          <p class="kind">Website · Art direction</p>
+          <h3>Syd White Portfolio</h3>
+          <p>A portfolio site for Syd, an event stylist who works mostly in fabric. Her professional work was mainly white weddings and corporate events, while her own eye runs richer and stranger, so the site needed to show both: a polished version of authentic.</p>
+          <p>My starting point was that Syd’s work is made by hand and arranged in rooms, so the site should feel arranged too. To emphasize that, I drew on visual references I had shared in <em>Unreal Estate</em>, a course I developed exploring the material culture of home: the film <em>The Color of Pomegranates</em>, with its walls of rugs and clustered objects, and Shaker gift drawings, where everything is arranged and floating on the page. I also looked to Sheila Hicks, Shona Heath and David Stark for their work with fabric and material. We steered away from pastels and anything florist-like toward deeper, jewel-toned and theatrical choices.</p>
+          <p>The home page became an assemblage. Syd embossed the navigation herself in metal; I cut each plate out, colour-corrected them into one consistent metal and set them floating in a cloud-ringed sky, so the buttons feel like objects suspended in space rather than menu items. They lift and tilt when you hover, like something you could reach out and take. Inside, I treated her handmade decor the same way, each piece cut out and floating on white, and gave installations titles like <em>Anthesis</em> and <em>Sea Change</em> so they read as artworks. I also laid out a matching resume.</p>
+          <p class="role">What I did: Research, art direction, home page concept and build, image editing, page layouts, titles and copy, resume design</p>
+          <p class="role"><a href="https://sydw3941.ic.tc/" target="_blank" rel="noopener">Visit Syd’s site →</a></p>
+          <div class="tags"><a href="#identity" style="--c: var(--c-bowl)">Brand identity</a> <a href="#photo" style="--c: var(--c-flower)">Photo &amp; editorial</a></div>
+        </div>
+      </li>
+      <li class="project" id="work-orange" data-cats="strategy identity print">
+        <div class="shots" style="--n: 1"><img src="work/kth/orange-downtown-plan.jpg?v=7" alt="Orange Riverfront Park and Wayfinding Plan: in the top corner, carved walnut signs with gilded lettering (the Welcome to Orange gateway sign and the Wheeler Memorial Library directional sign), a monarch and the palette; below, the concept site plan on the Millers River with a wayfinding sign planted with butterfly milkweed at each entrance, wildflowers in the rain gardens, an entrance archway and string-lit promenade, brick paving, a music stage, a plaza with movable seating, machine-part sculptures, a stargazing bar, rain gardens and a riverwalk" loading="lazy"></div>
+        <div class="info">
+          <p class="kind">Community research · Wayfinding · Placemaking</p>
+          <h3>Making Downtown Orange a Gathering Place</h3>
+          <p>At the main intersection downtown, the highway signs all pointed travellers out of Orange, toward other towns. Down by the Millers River, teenagers were already gathering on the old industrial riverfront. Instead of moving people along, I set out to give them reasons to stay: signs that welcome people into downtown, and a riverfront park built around how the place was already being used.</p>
+          <p>Community surveys showed what residents loved: flight, from parachuting at the Jump Town airfield to the monarch butterfly migration, and the nickname “The Friendly Town.” That became a family of carved wooden signs with gilded lettering and parachutes over the river, along with identity guidelines and location maps. Each sign is planted with butterfly milkweed, making them natural signs for nature’s wayfinders. At the riverfront, I mapped how people used the site and documented its industrial artefacts, then designed a park that reuses machinery from nearby factories, with a “star bar” for stargazing, a music stage, rain gardens and lighting.</p>
+          <p class="role">What I did: Community research and surveys, site mapping, visual identity, guidelines, signage design, park concept design</p>
+          <div class="tags"><a href="#strategy" style="--c: var(--c-orange)">Strategy &amp; workshops</a> <a href="#identity" style="--c: var(--c-bowl)">Brand identity</a> <a href="#print" style="--c: var(--c-orange)">Print &amp; merch</a></div>
+        </div>
+      </li>
+      <li class="project" id="work-valley" data-cats="strategy print">
+        <div class="shots" style="--n: 1"><img src="work/kth/valley-on-board.jpg" alt="Workshop participants marking up a regional transit map" loading="lazy"></div>
+        <div class="info">
+          <p class="kind">Engagement · Workshops · Media</p>
+          <h3>Valley on Board Transit Study</h3>
+          <p>A Federal Transit Administration HOPE grant project in western Massachusetts, reaching communities usually left out of transport planning, including Environmental Justice communities and rural residents.</p>
+          <p>I designed engagement tools that made planning trade-offs feel concrete: a “would you rather” conversation card game and a polling system using custom “bus bucks.” Television appearances and media outreach brought in people who never come to public meetings.</p>
+          <p class="role">What I did: Engagement design, workshop facilitation, media outreach, presentation materials</p>
+          <div class="tags"><a href="#strategy" style="--c: var(--c-orange)">Strategy &amp; workshops</a> <a href="#print" style="--c: var(--c-orange)">Print &amp; merch</a></div>
+        </div>
+      </li>
+      <li class="project" id="work-housemates" data-cats="photo identity strategy">
+        <div class="shots" style="--n: 2"><img src="work/kth/housemates-covers.jpg" alt="Housemates Magazine covers: red, black and multicoloured cut-paper tulips in four colourways" loading="lazy"><img src="work/kth/housemates-workshop.jpg" alt="Poster for the Housemates workshop at the Harvard GSD Design Research Forum" loading="lazy"></div>
+        <div class="info">
+          <p class="kind">Editorial · Brand identity · Events</p>
+          <h3>Housemates Magazine</h3>
+          <p>A magazine about living together: the housemate relationship, which is how many young people live, yet rarely gets told as a story.</p>
+          <p>I collaborated on the logo, edited the magazine and co-led a speculative design workshop with Harvard Graduate School of Design’s Design Research Forum, asking architects and designers to draw what “home” means to them.</p>
+          <p class="role">What I did: Logo (in collaboration), editorial, event design, workshop facilitation</p>
+          <div class="tags"><a href="#photo" style="--c: var(--c-flower)">Photo &amp; editorial</a> <a href="#identity" style="--c: var(--c-bowl)">Brand identity</a> <a href="#strategy" style="--c: var(--c-orange)">Strategy &amp; workshops</a></div>
+        </div>
+      </li>
+      <li class="project" id="work-okay" data-cats="photo identity social">
+        <div class="shots" style="--n: 2"><img src="work/kth/okay-issue-2.jpg" alt="OKAY Mag Issue 2, Pink Drink: cover with two young women leaning together" loading="lazy"><img src="work/kth/okay-site.jpg" alt="OKAY Magazine website with a contributor list on a red and yellow shape" loading="lazy"></div>
+        <div class="info">
+          <p class="kind">Publishing · Community</p>
+          <h3>OKAY Magazine</h3>
+          <p>A feminist publication and art collective I co-founded, designed, edited and published, made as an alternative to the slick look of commercial fashion magazines.</p>
+          <p>Issues were organised around themes like “the color pink,” with a DIY zine aesthetic that welcomed imperfection. The community grew through printed issues, a website and an online reading group for bell hooks’ <em>All About Love</em>.</p>
+          <p class="role">What I did: Co-founder, art direction, design, editing, community building</p>
+          <div class="tags"><a href="#photo" style="--c: var(--c-flower)">Photo &amp; editorial</a> <a href="#identity" style="--c: var(--c-bowl)">Brand identity</a> <a href="#social" style="--c: var(--c-leaves)">Social media</a></div>
+        </div>
+      </li>
+      <li class="project" id="work-lowtide" data-cats="story">
+        <div class="shots" style="--n: 1"><img src="work/kth/low-tide.jpg" alt="Low Tide podcast cover art: illustrated figures wading in a tide pool under a pale sun" loading="lazy"></div>
+        <div class="info">
+          <p class="kind">Audio · Storytelling</p>
+          <h3>Low Tide Podcast</h3>
+          <p>A podcast I produced, co-wrote and co-hosted, treating the news as a beach to comb at low tide together rather than something to consume alone.</p>
+          <p>It mixed reporting, conversation and narrative storytelling, including an episode on union organising at McLean Hospital. I composed the theme song in the style of a children’s TV show, a playful sound that told listeners this would be a different kind of political show.</p>
+          <figure class="listen">
+            <figcaption>Listen to the theme song</figcaption>
+            <audio controls preload="none" src="work/audio/low-tide-theme.mp3">Your browser can’t play this audio.</audio>
+          </figure>
+          <p class="role">What I did: Producing, writing, hosting, theme song</p>
+          <div class="tags"><a href="#story" style="--c: var(--c-lemon)">Story &amp; copywriting</a></div>
+        </div>
+      </li>
+      <li class="project" id="work-galleries" data-cats="identity strategy">
+        <div class="shots" style="--n: 2"><img src="work/kth/laundry-room.jpg" alt="Live music in a small white gallery room" loading="lazy"><img src="work/kth/crush-gallery.jpg" alt="A long woven textile hanging on a gallery wall" loading="lazy"></div>
+        <div class="info">
+          <p class="kind">Spaces · Visual identity</p>
+          <h3>The Laundry Room &amp; Crush Galleries</h3>
+          <p>Two galleries made from overlooked spaces. At King’s College, students already gathered in the underground laundry room, so it became a gallery for feminist work. In Halifax’s North End, a vacant convenience store became Crush Gallery.</p>
+          <p>Both kept the character of what the space had been. Crush’s hand-painted facade and logo grew from a soda can found on site.</p>
+          <p class="role">What I did: Concept, curation, identity, programming</p>
+          <div class="tags"><a href="#identity" style="--c: var(--c-bowl)">Brand identity</a> <a href="#strategy" style="--c: var(--c-orange)">Strategy &amp; workshops</a></div>
+        </div>
+      </li>
+    </ul>
+
+    <h3 class="gallery-h" id="photos">photos</h3>
+    <div class="photo-grid">
+      <img src="work/photos/photo-1.jpg" alt="Two young women in pink against a sunlit concrete wall, one holding a pale pink umbrella" loading="lazy">
+      <img src="work/photos/photo-2.jpg" alt="A hand holding a small mirror that reflects a face with closed eyes and coral eyeshadow" loading="lazy">
+      <img src="work/photos/photo-3.jpg" alt="A woman in a pink dress stands with arms outstretched against a concrete wall, casting a long shadow" loading="lazy">
+      <img src="work/photos/photo-4.jpg" alt="A woman in a pink coat and cream skirt kicks one leg high in front of a chain-link fence at dusk" loading="lazy">
+    </div>
+  </div>
+
+  <!-- SERVICE PAGES -->
+  <article class="page" id="social" hidden style="--tint: var(--pool); --tilt: -3deg; --c: var(--c-leaves)">
+    <a class="back" href="#">← All services</a>
+    <div class="page-grid">
+      <div class="hero-piece" style="--w: 250px">
+        <img src="cutouts/pineapple.png" alt="Papercut pineapple leaves">
+        <p class="book-label">the leaves</p>
+        <p class="prompt">Find a plant you have kept for a while.
+Notice which leaves turned toward the light.
+Ask yourself: where is my attention already going,
+and what would grow if I tended it?</p>
+      </div>
+      <div class="copy">
+        <h2>Social media</h2>
+        <p class="lead">Posts that look like you on every platform, and a rhythm you can actually keep.</p>
+        <p>A set of graphics and templates built from your identity, so each post feels considered without starting from scratch. The best posts usually show the work being made.</p>
+        <h3>What this includes</h3>
+        <ul>
+          <li>Post, carousel and story graphics</li>
+          <li>Editable templates for your team</li>
+          <li>Content calendar and caption writing</li>
+          <li>Launch and event announcements</li>
+        </ul>
+      </div>
+    </div>
+  </article>
+
+  <article class="page" id="newsletters" hidden style="--tint: var(--sage); --tilt: -2deg; --c: var(--c-peach)">
+    <a class="back" href="#">← All services</a>
+    <div class="page-grid">
+      <div class="hero-piece" style="--w: 160px">
+        <img src="cutouts/peach.png" alt="Papercut peach on a green leaf">
+        <p class="book-label">the peach</p>
+      </div>
+      <div class="copy">
+        <h2>Newsletters &amp; interviews</h2>
+        <p class="lead">A newsletter that celebrates the people in your community and helps the world of your work grow.</p>
+        <p>I love meeting the makers, friends and collaborators who are part of your story, visiting them where they work and asking about what inspires them. Each issue welcomes your readers a little further into the world you’re building, with interviews, behind-the-scenes photos and a first look at what’s coming next. A small list of people who really care is worth more than a big audience scrolling past, and it’s yours to keep.</p>
+        <h3>What this includes</h3>
+        <ul>
+          <li>Newsletter design and templates</li>
+          <li>Interviews with makers and collaborators, with photos</li>
+          <li>Your first issues, written together</li>
+          <li>Email campaigns for launches</li>
+        </ul>
+        <h3>Examples</h3>
+        <p><a href="https://substack.com/@orlastories" target="_blank" rel="noopener">Orla Stories</a>. I helped define the voice and vision for this journal and wrote its interview with Justin of valdah, telling the story behind his label.</p>
+        <p><b>Kept</b>, my own newsletter about design in everyday life. Each issue tells the history behind a familiar form, starting with Pennsylvania barn stars, illustrated with my own designs.</p>
+      </div>
+    </div>
+  </article>
+
+  <article class="page" id="photo" hidden style="--tint: var(--pinkie); --tilt: 4deg; --c: var(--c-flower)">
+    <a class="back" href="#">← All services</a>
+    <div class="page-grid">
+      <div class="hero-piece" style="--w: 150px">
+        <img src="cutouts/flower.png" alt="Papercut pink carnation">
+        <p class="book-label">the flower</p>
+        <p class="prompt">Find a flower that is beginning to turn.
+Paint it today.
+Paint it again in three days.
+Notice what changed.
+Ask yourself: what have I been waiting to begin
+because I cannot yet see how it ends?</p>
+      </div>
+      <div class="copy">
+        <h2>Photo &amp; editorial</h2>
+        <p class="lead">Pictures and pages that give your work room to be looked at slowly.</p>
+        <p>From planning a shoot to laying out the finished spread. I have co-founded, art directed and designed magazines, and I bring the same care to lookbooks, catalogues and features about your work.</p>
+        <h3>What this includes</h3>
+        <ul>
+          <li>Photo shoots and art direction</li>
+          <li>Editorial spreads and features</li>
+          <li>Magazines, zines and lookbooks</li>
+          <li>Catalogues and annual reports</li>
+        </ul>
+        <h3>Photography</h3>
+        <div class="svc-photos">
+          <img src="work/photos/photo-1.jpg" alt="Two young women in pink against a sunlit concrete wall, one holding a pale pink umbrella" loading="lazy">
+          <img src="work/photos/photo-3.jpg" alt="A woman in a pink dress stands with arms outstretched against a concrete wall, casting a long shadow" loading="lazy">
+          <img src="work/photos/photo-2.jpg" alt="A hand holding a small mirror that reflects a face with closed eyes and coral eyeshadow" loading="lazy">
+          <img src="work/photos/photo-4.jpg" alt="A woman in a pink coat and cream skirt kicks one leg high in front of a chain-link fence at dusk" loading="lazy">
+        </div>
+      </div>
+    </div>
+  </article>
+
+  <article class="page" id="print" hidden style="--tint: var(--millie); --tilt: 3deg; --c: var(--c-orange)">
+    <a class="back" href="#">← All services</a>
+    <div class="page-grid">
+      <div class="hero-piece" style="--w: 190px">
+        <img src="cutouts/orange.png" alt="Papercut orange">
+        <p class="book-label">the orange</p>
+      </div>
+      <div class="copy">
+        <h2>Print &amp; merch</h2>
+        <p class="lead">Things people can hold, pin up and keep: the poster on the wall, the invitation on the fridge, the mug someone reaches for every morning.</p>
+        <p>Print is where a brand becomes part of a place and part of people’s everyday lives. I design printed pieces and merchandise with real care for paper, material and finish, and work with printers and makers I trust, looking after production from first sample to delivery.</p>
+        <h3>Print</h3>
+        <ul>
+          <li>Event and production posters</li>
+          <li>Book covers</li>
+          <li>Signage and wayfinding</li>
+          <li>Flyers and brochures</li>
+        </ul>
+        <h3>Invitations &amp; stationery</h3>
+        <ul>
+          <li>Wedding and event invitation suites</li>
+          <li>Save the dates, menus, place cards and signage</li>
+          <li>Letterpress, foil and hand-finished details</li>
+          <li>Greeting cards, postcards and notecards</li>
+        </ul>
+        <h3>Merchandise</h3>
+        <ul>
+          <li>Embroidered hats and caps</li>
+          <li>T-shirts, sweatshirts and workwear</li>
+          <li>Mugs and ceramics</li>
+          <li>Tote bags, scarves and textiles</li>
+          <li>Enamel pins, patches and stickers</li>
+          <li>Art prints and zines</li>
+          <li>Packaging, hang tags and labels</li>
+        </ul>
+      </div>
+    </div>
+  </article>
+
+
+  <article class="page" id="identity" hidden style="--tint: var(--pool); --tilt: 0deg; --c: var(--c-bowl)">
+    <a class="back" href="#">← All services</a>
+    <div class="page-grid">
+      <div class="hero-piece" style="--w: 300px">
+        <img src="cutouts/bowl.png" alt="Papercut bowl with a blue rim">
+        <p class="book-label">the bowl</p>
+        <p class="prompt">Find a container. Trace its outline.
+Inside its outline, write down
+what it has held.
+Ask yourself: what am I holding?
+What do I want to be holding?
+What can I release?</p>
+      </div>
+      <div class="copy">
+        <h2>Brand identity</h2>
+        <p class="lead">The bowl that holds everything else: a visual language people recognise wherever they meet you.</p>
+        <p>We decide what your brand holds and what it can let go of. Then we give it a look that feels the way your work feels, and guidelines so every post, page and poster belongs together.</p>
+        <h3>What this includes</h3>
+        <ul>
+          <li>Logo and marks</li>
+          <li>Colour palette and typefaces</li>
+          <li>Positioning, naming and taglines</li>
+          <li>Brand guidelines</li>
+        </ul>
+      </div>
+    </div>
+  </article>
+
+  <article class="page" id="story" hidden style="--tint: var(--millie); --tilt: 9deg; --c: var(--c-lemon)">
+    <a class="back" href="#">← All services</a>
+    <div class="page-grid">
+      <div class="hero-piece" style="--w: 90px">
+        <img src="cutouts/wedge.png" alt="Papercut lemon wedge">
+        <p class="book-label">the lemon</p>
+        <p class="prompt">Print out a story you know too well.
+Cut it up.
+Rearrange it.
+Read it again,
+and see what is revealed.</p>
+      </div>
+      <div class="copy">
+        <h2>Story &amp; copywriting</h2>
+        <p class="lead">The words underneath everything you make.</p>
+        <p>Where you come from, what drives you, what you will not compromise on. We read it aloud, cut it back and build it up again until it holds, then carry it into every page and post.</p>
+        <h3>What this includes</h3>
+        <ul>
+          <li>Origin story and about page</li>
+          <li>Brand narrative, in long and short versions</li>
+          <li>Website and product copy</li>
+          <li>Press releases and funding applications</li>
+        </ul>
+      </div>
+    </div>
+  </article>
+
+  <article class="page" id="strategy" hidden style="--tint: var(--pinkie); --tilt: -8deg; --c: var(--c-orange)">
+    <a class="back" href="#">← All services</a>
+    <div class="page-grid">
+      <div class="hero-piece" style="--w: 85px">
+        <img src="cutouts/slice.png" alt="Papercut orange slice">
+        <p class="book-label">the slice</p>
+      </div>
+      <div class="copy">
+        <h2>Strategy &amp; workshops</h2>
+        <p class="lead">Every project begins by listening. Not ready for a whole project? Start with one slice.</p>
+        <p>We talk about how you started, who keeps coming back to you and what your audience is looking for. From there we plan which channels are worth your time and when to launch. Workshops draw on <em>Still Life: Simple Prompts for Creative Practice</em>, my small book of exercises built around the objects in this bowl.</p>
+        <h3>What this includes</h3>
+        <ul>
+          <li>Listening sessions with you and your customers</li>
+          <li>Marketing plan and seasonal calendar</li>
+          <li>Campaigns, launches and events</li>
+          <li>One-to-one sessions and team workshops</li>
+        </ul>
+      </div>
+    </div>
+  </article>
+
+  <article class="page" id="book" hidden style="--tint: var(--pool); --tilt: 0deg; --c: var(--sepia)">
+    <a class="back" href="#">← Back to the bowl</a>
+    <div class="page-grid">
+      <div class="hero-piece" style="--w: 300px">
+        <img src="cutouts/bowl.png" alt="Papercut bowl with a blue rim">
+      </div>
+      <div class="copy">
+        <h2>Let’s chat</h2>
+        <p class="lead">I’d love to hear about your work and where you feel stuck. No preparation needed and no obligation.</p>
+        <p class="calendly"><a href="https://calendly.com/klara-ingersoll" target="_blank" rel="noopener">Pick a time on Calendly →</a></p>
+        <p class="calendly-note">Choose any open slot and you’ll get a confirmation with a video link.</p>
+        <h3>Prefer email?</h3>
+        <div class="contact">
+          <code id="email-addr">klara.ingersoll@gmail.com</code>
+          <button type="button" id="copy-email">Copy address</button>
+        </div>
+      </div>
+    </div>
+  </article>
+
+
+  <footer>Kept Studio · Klara Ingersoll · Papercut collage by hand</footer>
+</main>
+
+<script>
+(function () {
+  var home = document.getElementById('home');
+  var pages = Array.prototype.slice.call(document.querySelectorAll('.page'));
+  var order = ['social', 'newsletters', 'photo', 'print', 'identity', 'story', 'strategy'];
+  var names = { social: 'Social media', newsletters: 'Newsletters & interviews', photo: 'Photo & editorial', print: 'Print & merch', identity: 'Brand identity', story: 'Story & copywriting', strategy: 'Strategy & workshops' };
+
+  pages.forEach(function (p) {
+    var copy = p.querySelector('.copy');
+    var i = order.indexOf(p.id);
+    if (i < 0) return;
+    var matches = Array.prototype.slice.call(document.querySelectorAll('[data-cats]')).filter(function (w) {
+      return w.getAttribute('data-cats').split(' ').indexOf(p.id) > -1;
+    });
+    if (matches.length) {
+      var h = document.createElement('h3'); h.textContent = 'Related work'; copy.appendChild(h);
+      var list = document.createElement('ul'); list.className = 'related';
+      matches.forEach(function (w) {
+        var img = w.querySelector('img');
+        var title = w.querySelector('h3, figcaption b');
+        var kind = w.querySelector('.kind');
+        var sub = kind ? kind.textContent : (w.querySelector('figcaption') ? w.querySelector('figcaption').textContent.replace(title.textContent, '') : '');
+        var li = document.createElement('li');
+        var a = document.createElement('a'); a.href = '#' + w.id;
+        if (img) { var im = document.createElement('img'); im.src = img.getAttribute('src'); im.alt = ''; im.loading = 'lazy'; a.appendChild(im); }
+        else { var ph = document.createElement('span'); ph.className = 'related-ph'; ph.textContent = title.textContent; a.appendChild(ph); }
+        var b = document.createElement('b'); b.textContent = title.textContent;
+        var sm = document.createElement('small'); sm.textContent = sub;
+        a.appendChild(b); a.appendChild(sm); li.appendChild(a); list.appendChild(li);
+      });
+      copy.appendChild(list);
+    }
+    var prev = order[(i + order.length - 1) % order.length], next = order[(i + 1) % order.length];
+    var nav = document.createElement('nav');
+    nav.className = 'next';
+    nav.setAttribute('aria-label', 'More services');
+    nav.innerHTML = '<a href="#' + prev + '">← ' + names[prev] + '</a><a href="#' + next + '">' + names[next] + ' →</a>';
+    copy.appendChild(nav);
+  });
+
+  function show() {
+    var id = location.hash.replace('#', '');
+    var el = id ? document.getElementById(id) : null;
+    var target = el ? el.closest('.page') : null;
+    home.hidden = !!target;
+    pages.forEach(function (p) { p.hidden = p !== target; });
+    if (target && el !== target) {
+      el.scrollIntoView();
+    } else if (target) {
+      window.scrollTo(0, 0);
+      var h = target.querySelector('h2'); h.setAttribute('tabindex', '-1'); h.focus({ preventScroll: true });
+    } else if (id) {
+      var el = document.getElementById(id);
+      if (el) el.scrollIntoView();
+    } else {
+      window.scrollTo(0, 0);
+    }
+  }
+  window.addEventListener('hashchange', show);
+  show();
+
+
+
+  var btn = document.getElementById('copy-email');
+  btn.addEventListener('click', function () {
+    var node = document.getElementById('email-addr');
+    function selectIt() {
+      var r = document.createRange(); r.selectNodeContents(node);
+      var s = window.getSelection(); s.removeAllRanges(); s.addRange(r);
+      btn.textContent = 'Selected: press Cmd+C';
+    }
+    try { navigator.clipboard.writeText(node.textContent).then(function () { btn.textContent = 'Copied'; }, selectIt); }
+    catch (e) { selectIt(); }
+  });
+})();
+</script>
+
+</body></html>
